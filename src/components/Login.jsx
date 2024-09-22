@@ -1,11 +1,19 @@
 import { useState } from "react";
+import { login } from "../services/authService";
 
-const Login = () => {
+const Login = ({ setToken }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    try {
+      const token = await login(email, password);
+      setToken(token);
+      localStorage.setItem("token", token);
+    } catch (error) {
+      alert("Login failed. Please check your credentials.", error);
+    }
   };
 
   return (
