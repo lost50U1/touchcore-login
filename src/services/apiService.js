@@ -15,6 +15,6 @@ export const searchTours = async (query, token) => {
 
   return {
     axiosCancelToken,
-    data: response.data,
+    data: response.data.data,
   };
 };
