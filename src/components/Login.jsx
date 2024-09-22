@@ -4,6 +4,7 @@ import { login } from "../services/authService";
 const Login = ({ setToken }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -12,13 +13,15 @@ const Login = ({ setToken }) => {
       setToken(token);
       localStorage.setItem("token", token);
     } catch (error) {
-      alert("Login failed. Please check your credentials.", error);
+      setErrorMessage("Login failed. Please check your credentials.", error);
     }
   };
 
   return (
     <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-md">
       <h1 className="text-2xl font-semibold mb-4">Login</h1>
+      {errorMessage && <p className="text-red-500 mb-4">{errorMessage}</p>}{" "}
+      {/* Error message displayed here */}
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label htmlFor="email" className="block text-gray-700 text-sm mb-2">
