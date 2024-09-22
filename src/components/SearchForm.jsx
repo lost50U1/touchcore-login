@@ -56,7 +56,6 @@ const SearchForm = ({ token }) => {
 
     try {
       if (selectedDestination) {
-        // Use the selected destination directly
         setSearchResults([selectedDestination]);
       } else {
         const { data, axiosCancelToken } = await searchTours(searchTerm, token);
@@ -106,8 +105,7 @@ const SearchForm = ({ token }) => {
                   onClick={() => handleSelectSuggestion(suggestion)}
                   className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
                 >
-                  {suggestion.destinationName} -{" "}
-                  {suggestion.defaultCurrencyCode}
+                  {`${suggestion.destinationName} - ${suggestion.destinationType}`}
                 </li>
               ))}
             </ul>
@@ -127,8 +125,7 @@ const SearchForm = ({ token }) => {
         <ul>
           {searchResults.map((dest) => (
             <li key={dest.destinationId}>
-              <strong>{dest.destinationName}</strong> -{" "}
-              {dest.defaultCurrencyCode} ({dest.timeZone})
+              <strong>{dest.destinationName}</strong> - {dest.destinationType}
             </li>
           ))}
         </ul>
