@@ -12,6 +12,7 @@ const SearchForm = ({ token }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const cancelTokenRef = useRef(null);
+  const [selectedDate, setSelectedDate] = useState("");
 
   const fetchAutocompleteSuggestions = useCallback(
     debounce(async (term) => {
@@ -111,6 +112,22 @@ const SearchForm = ({ token }) => {
             </ul>
           )}
         </div>
+
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm mb-2" htmlFor="date">
+            When
+          </label>
+          <input
+            type="date"
+            id="date"
+            aria-label="Date input"
+            value={selectedDate}
+            onChange={(e) => setSelectedDate(e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
+          />
+        </div>
+
         <button
           type="submit"
           className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
