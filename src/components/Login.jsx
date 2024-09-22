@@ -9,9 +9,9 @@ const Login = ({ setToken }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setErrorMessage("");
       const token = await login(email, password);
       setToken(token);
-      localStorage.setItem("token", token);
     } catch (error) {
       setErrorMessage("Login failed. Please check your credentials.", error);
     }

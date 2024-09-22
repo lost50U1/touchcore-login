@@ -4,11 +4,11 @@ import Login from "./components/Login";
 import SearchForm from "./components/SearchForm";
 
 const App = () => {
-  const [token, setToken] = useState(localStorage.getItem("token") || "");
+  const [token, setToken] = useState(null);
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      {!token ? <Login setToken={setToken} /> : <SearchForm token={token} />}
+      {token ? <SearchForm token={token} /> : <Login setToken={setToken} />}
     </main>
   );
 };
