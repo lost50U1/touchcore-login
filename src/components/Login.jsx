@@ -10,10 +10,11 @@ const Login = ({ setToken }) => {
     e.preventDefault();
     try {
       setErrorMessage("");
-      const token = await login(email, password);
-      setToken(token);
+      const token = await login(email, password); // Calling login service to get the token
+      setToken(token); // Pass the token to the parent component or state
     } catch (error) {
-      setErrorMessage("Login failed. Please check your credentials.", error);
+      console.error(error); // Log the error to debug if needed
+      setErrorMessage("Login failed. Please check your credentials."); // Show error message
     }
   };
 
