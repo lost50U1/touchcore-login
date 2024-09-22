@@ -1,8 +1,10 @@
+import SearchForm from "./components/SearchForm";
+
 const App = () => {
   return (
-    <div>
-      <h1 className="text-3xl font-bold underline">Hello world!</h1>
-    </div>
+    <main className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+      <SearchForm />
+    </main>
   );
 };
 
