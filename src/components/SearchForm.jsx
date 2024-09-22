@@ -1,4 +1,6 @@
-import { useState, useEffect, useRef } from "react";
+// SearchForm.jsx
+import { useState, useEffect, useRef, useCallback } from "react";
+import { debounce } from "lodash"; // Import debounce from lodash
 import { searchTours } from "../services/apiService";
 
 const SearchForm = ({ token }) => {
@@ -13,45 +15,45 @@ const SearchForm = ({ token }) => {
 
   const cancelTokenRef = useRef(null); // For canceling requests
 
-  // Handle input change and trigger the autocomplete API call
-  useEffect(() => {
-    if (searchTerm) {
-      setIsLoading(true);
-      setError(null);
-
-      // Cancel previous request if exists
+  // Debounced function to handle search API calls
+  const fetchSearchResults = useCallback(
+    debounce(async (term) => {
       if (cancelTokenRef.current) {
         cancelTokenRef.current.cancel(
           "New request triggered, canceling the previous one."
         );
       }
+      setIsLoading(true);
+      setError(null);
 
-      // Trigger the autocomplete search API call
-      searchTours(searchTerm, token)
-        .then(({ data, axiosCancelToken }) => {
-          setSearchResults({
-            destinations: data.destinations || [],
-            products: data.products || [],
-          });
-          cancelTokenRef.current = axiosCancelToken;
-        })
-        .catch((err) => {
-          // No need for axios.isCancel, simply log or handle the error
-          if (
-            err.message === "New request triggered, canceling the previous one."
-          ) {
-            console.log("Request canceled:", err.message);
-          } else {
-            setError("Error fetching search results. Please try again.");
-          }
-        })
-        .finally(() => {
-          setIsLoading(false);
+      try {
+        const { data, axiosCancelToken } = await searchTours(term, token);
+        setSearchResults({
+          destinations: data.destinations,
+          products: data.products,
         });
+        cancelTokenRef.current = axiosCancelToken;
+      } catch (err) {
+        if (axios.isCancel(err)) {
+          console.log("Request canceled:", err.message);
+        } else {
+          setError("Error fetching search results. Please try again.");
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    }, 300), // Delay by 300ms
+    [token]
+  );
+
+  // Handle input change and trigger the autocomplete API call with debounce
+  useEffect(() => {
+    if (searchTerm) {
+      fetchSearchResults(searchTerm);
     } else {
       setSearchResults({ destinations: [], products: [] }); // Clear results if input is empty
     }
-  }, [searchTerm, token]);
+  }, [searchTerm, fetchSearchResults]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
