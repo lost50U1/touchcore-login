@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import axios from "axios";
+import PropTypes from "prop-types";
 import { debounce } from "lodash";
 import { searchTours } from "../services/apiService";
 
@@ -174,6 +176,10 @@ const SearchForm = ({ token }) => {
       </div>
     </div>
   );
+};
+
+SearchForm.propTypes = {
+  token: PropTypes.string.isRequired,
 };
 
 export default SearchForm;
